@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/monture')]
 /**
- * Summary of MovieController
+ * Summary of MontureController
  */
 class MontureController extends AbstractController
 {
@@ -51,8 +51,8 @@ class MontureController extends AbstractController
     #[Route('/{id}', methods: 'DELETE')]
     public function delete(int $id): JsonResponse
     {
-        $movie = $this->repo->findById($id);
-        if ($movie == null) {
+        $monture = $this->repo->findById($id);
+        if ($monture == null) {
             return $this->json('Resource Not found', 404);
         }
         $this->repo->delete($id);
