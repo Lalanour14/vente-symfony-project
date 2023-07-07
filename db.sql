@@ -37,7 +37,9 @@ CREATE TABLE
     ordre (
         id INT PRIMARY KEY AUTO_INCREMENT,
         createdAt DATETIME,
-        customName VARCHAR (256) NOT NULL
+        customName VARCHAR (256) NOT NULL,
+        id_monture INT,
+        FOREIGN KEY (id_monture) REFERENCES monture(id)
     );
 
 CREATE TABLE
