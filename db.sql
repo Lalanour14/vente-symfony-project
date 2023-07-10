@@ -100,8 +100,21 @@ INSERT INTO
 VALUES ('antireflet', 100), ('protection ecran', 200), ('progressive', 300), ('aminci', 100);
 
 INSERT INTO
-    ordre(createdAT, customName)
-VALUES ('2022-12-24', 'Alain Deloin'), (
+    ordre(
+        createdAT,
+        customName,
+        id_monture
+    )
+VALUES (
+        '2022-12-24',
+        'Alain Deloin',
+        2
+    ), (
         '2019-07-14',
-        'Brigitte Cradaud'
-    ), ('2000-01-15', 'Girard Antoit'), ('1989-06-21', 'Rita Masti');
+        'Brigitte Cradaud',
+        2
+    ), (
+        '2000-01-15',
+        'Girard Antoit',
+        1
+    ), ('1989-06-21', 'Rita Masti', 4);

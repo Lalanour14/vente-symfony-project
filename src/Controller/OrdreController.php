@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Odre;
-use App\Repository\OdreRepository;
+use App\Entity\Ordre;
+use App\Repository\OrdreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,21 +14,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 
-#[Route('/api/odre')]
-
-
-/**
- * Summary of VerreController
- */
-class VerreController extends AbstractController
+#[Route('/api/ordre')]
+class OrdreController extends AbstractController
 {
 
 
-    /**
-     * Summary of __construct
-     * @param \App\Repository\VerreRepository $repo
-     */
-    public function __construct(private OdreRepository $repo)
+
+    public function __construct(private OrdreRepository $repo)
     {
     }
 
@@ -45,18 +37,18 @@ class VerreController extends AbstractController
     #[Route('/{id}', methods: 'GET')]
     public function one(int $id): JsonResponse
     {
-        $verre = $this->repo->findById($id);
-        if ($verre == null) {
+        $ordre = $this->repo->findById($id);
+        if ($ordre == null) {
             return $this->json('Resource Not found', 404);
         }
 
-        return $this->json($verre);
+        return $this->json($ordre);
     }
     #[Route('/{id}', methods: 'DELETE')]
     public function delete(int $id): JsonResponse
     {
-        $verre = $this->repo->findById($id);
-        if ($verre == null) {
+        $ordre = $this->repo->findById($id);
+        if ($ordre == null) {
             return $this->json('Resource Not found', 404);
         }
         $this->repo->delete($id);
@@ -69,21 +61,21 @@ class VerreController extends AbstractController
     public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
         // $data = $request->toArray();
-        // $verre = new Odre(new\DateTime (), $data['customName'],$data['id_monture]);
+        // $ordre = new Odre(new\DateTime (), $data['customName'],$data['id_monture]);
 
         try {
 
-            $odre = $serializer->deserialize($request->getContent(), Odre::class, 'json');
+            $ordre = $serializer->deserialize($request->getContent(), Ordre::class, 'json');
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($odre);
+        $errors = $validator->validate($ordre);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        $this->repo->persist($odre);
+        $this->repo->persist($ordre);
 
-        return $this->json($odre, 201);
+        return $this->json($ordre, 201);
     }
 
 
@@ -91,24 +83,24 @@ class VerreController extends AbstractController
     public function update(int $id, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
 
-        $odre = $this->repo->findById($id);
-        if ($odre == null) {
+        $ordre = $this->repo->findById($id);
+        if ($ordre == null) {
             return $this->json('Resource Not found', 404);
         }
         try {
-            $serializer->deserialize($request->getContent(), odre::class, 'json', [
-                'object_to_populate' => $odre
+            $serializer->deserialize($request->getContent(), Ordre::class, 'json', [
+                'object_to_populate' => $ordre
             ]);
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($odre);
+        $errors = $validator->validate($ordre);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        $this->repo->update($odre);
+        $this->repo->update($ordre);
 
-        return $this->json($odre);
+        return $this->json($ordre);
     }
 
 

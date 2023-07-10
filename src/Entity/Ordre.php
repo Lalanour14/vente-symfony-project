@@ -5,24 +5,23 @@ namespace App\Entity;
 use DateTime;
 
 
-class Odre
+class Ordre
 {
 
-
+    /**
+     * Summary of __construct
+     * @param \DateTime $createdAt
+     * @param string $customName
+     * @param int $idmonture
+     * @param mixed $id
+     */
     public function __construct(
         private DateTime $createdAt,
         private string $customName,
-        private int $id_monture,
+        private int $idMonture,
         private ?int $id = null
     ) {
     }
-
-
-
-
-
-
-
 
     /**
      * @return DateTime
@@ -59,28 +58,22 @@ class Odre
         $this->customName = $customName;
         return $this;
     }
-
-    /**
-     * @return int
-     */
-    public function getId_monture(): int
+    public function getIdMonture(): int
     {
-        return $this->id_monture;
+        return $this->idMonture;
     }
 
     /**
-     * @param int $id_monture 
+     * @param int $idMonture 
      * @return self
      */
-    public function setId_monture(int $id_monture): self
+    public function setIdMonture(int $idMonture): self
     {
-        $this->id_monture = $id_monture;
+        $this->idMonture = $idMonture;
         return $this;
     }
 
-    /**
-     * @return 
-     */
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,4 +88,10 @@ class Odre
         $this->id = $id;
         return $this;
     }
+
+    /**
+     * @return int
+     */
+
+
 }
