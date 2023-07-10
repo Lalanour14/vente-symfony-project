@@ -29,7 +29,7 @@ CREATE TABLE
 CREATE TABLE
     verre (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        Genre VARCHAR (256),
+        genre VARCHAR (256),
         price FLOAT
     );
 

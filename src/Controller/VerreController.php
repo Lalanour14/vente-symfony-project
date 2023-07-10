@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Monture;
-use App\Repository\MontureRepository;
-use App\Service\Uploader;
+use App\Entity\Verre;
+use App\Repository\VerreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,23 +11,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/monture')]
+#[Route('/api/verre')]
+
+
 /**
- * Summary of MontureController
+ * Summary of VerreController
  */
-class MontureController extends AbstractController
+class VerreController extends AbstractController
 {
+
 
     /**
      * Summary of __construct
-     * @param \App\Repository\MontureRepository $repo
+     * @param \App\Repository\VerreRepository $repo
      */
-    public function __construct(private MontureRepository $repo)
+    public function __construct(private VerreRepository $repo)
     {
     }
 
-
     #[Route(methods: 'GET')]
+
     /**
      * Summary of all
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -37,22 +39,21 @@ class MontureController extends AbstractController
     {
         return $this->json($this->repo->findAll());
     }
-
     #[Route('/{id}', methods: 'GET')]
     public function one(int $id): JsonResponse
     {
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $verre = $this->repo->findById($id);
+        if ($verre == null) {
             return $this->json('Resource Not found', 404);
         }
 
-        return $this->json($monture);
+        return $this->json($verre);
     }
     #[Route('/{id}', methods: 'DELETE')]
     public function delete(int $id): JsonResponse
     {
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $verre = $this->repo->findById($id);
+        if ($verre == null) {
             return $this->json('Resource Not found', 404);
         }
         $this->repo->delete($id);
@@ -60,32 +61,26 @@ class MontureController extends AbstractController
         return $this->json(null, 204);
     }
 
+
     #[Route(methods: 'POST')]
-
-
-
-    public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, Uploader $uploader)
+    public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
-        //$data = $request->toArray();
-        //$monture = new Monture($data['marque'], $data['model'], $data['basePrice'] $data['picture']);
+        // $data = $request->toArray();
+        // $verre = new Verre($data['genre'], $data['price']);
+
         try {
 
-            $monture = $serializer->deserialize($request->getContent(), Monture::class, 'json');
+            $verre = $serializer->deserialize($request->getContent(), Verre::class, 'json');
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($monture);
+        $errors = $validator->validate($verre);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        /*  if ($monture->getPicture()) {
+        $this->repo->persist($verre);
 
-              $filename = $uploader->upload($monture->getPicture());
-              $monture->setPicture($filename);
-          }*/
-        $this->repo->persist($monture);
-
-        return $this->json($monture, 201);
+        return $this->json($verre, 201);
     }
 
 
@@ -93,23 +88,32 @@ class MontureController extends AbstractController
     public function update(int $id, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
 
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $verre = $this->repo->findById($id);
+        if ($verre == null) {
             return $this->json('Resource Not found', 404);
         }
         try {
-            $serializer->deserialize($request->getContent(), monture::class, 'json', [
-                'object_to_populate' => $monture
+            $serializer->deserialize($request->getContent(), verre::class, 'json', [
+                'object_to_populate' => $verre
             ]);
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($monture);
+        $errors = $validator->validate($verre);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        $this->repo->update($monture);
+        $this->repo->update($verre);
 
-        return $this->json($monture);
+        return $this->json($verre);
     }
+
+
+
+
+
+
+
+
+
 }

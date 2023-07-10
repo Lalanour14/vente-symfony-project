@@ -80,6 +80,7 @@ class MontureRepository
         $query->bindValue(':basePrice', $monture->getBasePrice());
         $query->bindValue(':picture', $monture->getPicture());
 
+
         $query->bindValue(":id", $monture->getId());
 
         $query->execute();

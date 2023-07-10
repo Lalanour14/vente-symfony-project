@@ -49,9 +49,9 @@ class ShopRepository
     {
         $connection = Database::getConnection();
 
-        $query = $connection->prepare("INSERT INTO monture (name,adress) VALUES (:name,:adress)");
-        $query->bindValue(':marque', $shop->getName());
-        $query->bindValue(':model', $shop->getAdress());
+        $query = $connection->prepare("INSERT INTO shop (name,adress) VALUES (:name,:adress)");
+        $query->bindValue(':name', $shop->getName());
+        $query->bindValue(':adress', $shop->getAdress());
 
 
 
@@ -76,7 +76,7 @@ class ShopRepository
 
         $connection = Database::getConnection();
 
-        $query = $connection->prepare("UPDATE monture SET marque=:marque, model=:model, basePrice=:basePrice,  picture=:picture WHERE id=:id");
+        $query = $connection->prepare("UPDATE shop SET name=:name,adress=:adress WHERE id=:id");
         $query->bindValue(':name', $shop->getName());
         $query->bindValue(':adress', $shop->getAdress());
 

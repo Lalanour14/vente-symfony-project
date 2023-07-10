@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Monture;
-use App\Repository\MontureRepository;
-use App\Service\Uploader;
+
+use App\Entity\Shop;
+use App\Repository\ShopRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,27 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/monture')]
+#[Route('/api/shop')]
 /**
- * Summary of MontureController
+ * Summary of ShopController
  */
-class MontureController extends AbstractController
+class ShopController extends AbstractController
 {
 
     /**
      * Summary of __construct
-     * @param \App\Repository\MontureRepository $repo
+     * @param \App\Repository\ShopRepository $repo
      */
-    public function __construct(private MontureRepository $repo)
+    public function __construct(private ShopRepository $repo)
     {
     }
 
 
     #[Route(methods: 'GET')]
-    /**
-     * Summary of all
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function all(): JsonResponse
     {
         return $this->json($this->repo->findAll());
@@ -41,18 +37,18 @@ class MontureController extends AbstractController
     #[Route('/{id}', methods: 'GET')]
     public function one(int $id): JsonResponse
     {
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $shop = $this->repo->findById($id);
+        if ($shop == null) {
             return $this->json('Resource Not found', 404);
         }
 
-        return $this->json($monture);
+        return $this->json($shop);
     }
     #[Route('/{id}', methods: 'DELETE')]
     public function delete(int $id): JsonResponse
     {
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $shop = $this->repo->findById($id);
+        if ($shop == null) {
             return $this->json('Resource Not found', 404);
         }
         $this->repo->delete($id);
@@ -60,32 +56,26 @@ class MontureController extends AbstractController
         return $this->json(null, 204);
     }
 
+
     #[Route(methods: 'POST')]
-
-
-
-    public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, Uploader $uploader)
+    public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
-        //$data = $request->toArray();
-        //$monture = new Monture($data['marque'], $data['model'], $data['basePrice'] $data['picture']);
+        // $data = $request->toArray();
+        // $shop = new Shop($data['name'], $data['adress']);
+
         try {
 
-            $monture = $serializer->deserialize($request->getContent(), Monture::class, 'json');
+            $shop = $serializer->deserialize($request->getContent(), Shop::class, 'json');
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($monture);
+        $errors = $validator->validate($shop);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        /*  if ($monture->getPicture()) {
+        $this->repo->persist($shop);
 
-              $filename = $uploader->upload($monture->getPicture());
-              $monture->setPicture($filename);
-          }*/
-        $this->repo->persist($monture);
-
-        return $this->json($monture, 201);
+        return $this->json($shop, 201);
     }
 
 
@@ -93,23 +83,23 @@ class MontureController extends AbstractController
     public function update(int $id, Request $request, SerializerInterface $serializer, ValidatorInterface $validator)
     {
 
-        $monture = $this->repo->findById($id);
-        if ($monture == null) {
+        $shop = $this->repo->findById($id);
+        if ($shop == null) {
             return $this->json('Resource Not found', 404);
         }
         try {
-            $serializer->deserialize($request->getContent(), monture::class, 'json', [
-                'object_to_populate' => $monture
+            $serializer->deserialize($request->getContent(), shop::class, 'json', [
+                'object_to_populate' => $shop
             ]);
         } catch (\Exception $error) {
             return $this->json('Invalid body', 400);
         }
-        $errors = $validator->validate($monture);
+        $errors = $validator->validate($shop);
         if ($errors->count() > 0) {
             return $this->json(['errors' => $errors], 400);
         }
-        $this->repo->update($monture);
+        $this->repo->update($shop);
 
-        return $this->json($monture);
+        return $this->json($shop);
     }
 }
